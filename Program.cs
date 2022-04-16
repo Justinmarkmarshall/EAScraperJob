@@ -12,7 +12,7 @@ namespace EAScraperJob
 {
     public class Program
     {
-        private const string price = "180000";
+        private const string price = "200000";
         static async Task Main(string[] args)
         {
 

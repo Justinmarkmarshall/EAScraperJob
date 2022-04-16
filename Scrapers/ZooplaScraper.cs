@@ -1,5 +1,6 @@
 ﻿using EAScraperJob.Interfaces;
 using EAScraperJob.Mappers;
+using EAScraperJob.Mappers.v2;
 using EAScraperJob.Models;
 using Microsoft.Extensions.Logging;
 using System;
@@ -69,13 +70,13 @@ namespace EAScraperJob.Scrapers
                     var postCodeCounter = 0;
                     string url = $"https://www.zoopla.co.uk/for-sale/flats/{location.Value.ToLower()}/?is_auction=false&is_shared_ownership=false&page_size=25&price_max={price}&price_min={Calculate25PcOffPrice(Convert.ToInt32(price))}&view_type=list&q={location.Value.Replace("-", "%")}&radius=15&results_sort=newest_listings&search_source=facets";
                     var document = await _angleSharpWrapper.GetSearchResults(url);
-                    var searchResults = document.GetElementsByClassName("css-1anhqz4-ListingsContainer earci3d2");
+                    var searchResults = document.GetElementsByClassName("css-1anhqz4-ListingsContainer");
                     //the class name had changed
                     //var searchResults = document.GetElementsByClassName("css-1anhqz4-ListingsContainer e1b8efd72");
                     if (searchResults.Any())
                     {
                     //then also in the mapper the class names had changed, so basically this scraper breaks because htey are using randomised class names on their site
-                        var newHomes = searchResults.MapZ();
+                        var newHomes = searchResults.v2MapZ();
                         foreach (var home in newHomes)
                         {
                             if (!uniqueHouses.Any(r => r.Link == home.Link))
