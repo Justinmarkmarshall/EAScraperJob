@@ -15,5 +15,7 @@ namespace EAScraperJob.Dtos
         public int Deposit { get; set; }
 
         public DateTime Date { get; set; } = DateTime.Now;
+
+        public string? Postcode { get; set; } = String.Empty;
     }
 }

@@ -12,7 +12,7 @@ namespace EAScraperJob
 {
     public class Program
     {
-        private const string price = "200000";
+        private const string price = "250000";
         static async Task Main(string[] args)
         {
 
@@ -39,31 +39,37 @@ namespace EAScraperJob
             var efWrapper = serviceCollection.GetService<IEFWrapper>();
 
             try
-            {                
+            {
                 await efWrapper.SaveToDB("Starting the job".Map());
 
                 //setup ZooplaScraper
                 var rmScraper = serviceCollection.GetService<IRightMoveScraper>();
                 var zoopScraper = serviceCollection.GetService<IZooplaScraper>();                
                 var rmResults = await rmScraper.GetProperties(price);
-                var zoopResults = await zoopScraper.GetProperties(price);
+              
+                //var zoopResults = await zoopScraper.GetProperties(price);
 
                 var results = new List<House>();
                 results.AddRange(rmResults);
-                results.AddRange(zoopResults);
+                //results.AddRange(zoopResults);
 
                 if (results.Any())
                 {
+                    //remove unique because I think that the pids are reused
                     var uniqueResults = await RemoveDuplicates(results.ToList(), efWrapper);
 
                     if (uniqueResults.Any())
                     {
-                        await efWrapper.SaveToDB(uniqueResults.Map());
+                        await efWrapper.SaveToDB(results.Map());
                     }
+
+                    //await efWrapper.SaveToDB(results.Map());
                 }
             }
             catch (Exception ex)
             {
+                
+                //mapper here is throwing an error
                 await efWrapper.SaveToDB(ex.Map());
             }
             

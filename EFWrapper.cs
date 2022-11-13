@@ -18,7 +18,17 @@ namespace EAScraperJob
         {    
             try
             {
-                await _context.AddRangeAsync(properties);
+                var unique = new List<Property>();
+
+                foreach (Property property in properties)
+                {
+                    if (!_context.Properties.Select(r => r.Link).ToList().Contains(property.Link))
+                    {
+                        unique.Add(property);
+                    }
+                }
+
+                await _context.AddRangeAsync(unique);
                 await _context.SaveChangesAsync();
             }
            catch (Exception ex)

@@ -34,7 +34,6 @@ namespace EAScraperJob.Mappers
                         Area = address[0].InnerHtml,
                         Link = $"https://www.zoopla.co.uk/for-sale/details/{pid}",
                         //MonthlyRepayments = CalculateMonthlyRepayment(prce[0].InnerHtml.Replace("£", "").Replace(",", "")),
-                        MonthlyRepayments = 0,
                         //Deposit = Calculate10PcOfPrice(prce[0].InnerHtml.Remove(0, 1).Replace("£", "").Replace(",", ""))
                         Deposit = 0
                     });

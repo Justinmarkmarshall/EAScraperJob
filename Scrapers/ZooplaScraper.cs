@@ -11,8 +11,8 @@ using System.Threading.Tasks;
 
 namespace EAScraperJob.Scrapers
 {
-        public class ZooplaScraper : IZooplaScraper
-        {
+    public class ZooplaScraper : IZooplaScraper
+    {
 
         private Dictionary<string, string> _londonPostCodes = new Dictionary<string, string>()
         {
@@ -50,49 +50,51 @@ namespace EAScraperJob.Scrapers
             { "Acton", "W3" }
         };
 
-            IAngleSharpWrapper _angleSharpWrapper;
-            ILogger<ZooplaScraper> _logger;
-            IAuditWrapper _auditWrapper;
+        private const string V3ClassName = "css-1itfubx e19tytbu0";
+        private const string V2ClassName = "css-1anhqz4-ListingsContainer";
 
-            public ZooplaScraper(IAngleSharpWrapper angleSharpWrapper, ILogger<ZooplaScraper> logger, IAuditWrapper auditWrapper)
+        IAngleSharpWrapper _angleSharpWrapper;
+        ILogger<ZooplaScraper> _logger;
+        IAuditWrapper _auditWrapper;
+
+        public ZooplaScraper(IAngleSharpWrapper angleSharpWrapper, ILogger<ZooplaScraper> logger, IAuditWrapper auditWrapper)
+        {
+            _angleSharpWrapper = angleSharpWrapper;
+            _logger = logger;
+            _auditWrapper = auditWrapper;
+        }
+
+        public async Task<IList<House>> GetProperties(string price)
+        {
+            var uniqueHouses = new List<House>();
+
+            foreach (var location in _affordablePostCodes)
             {
-                _angleSharpWrapper = angleSharpWrapper;
-                _logger = logger;
-                _auditWrapper = auditWrapper;
-            }
+                var postCodeCounter = 0;
+                string url = $"https://www.zoopla.co.uk/for-sale/flats/{location.Value.ToLower()}/?is_auction=false&is_shared_ownership=false&page_size=25&price_max={price}&price_min={Calculate25PcOffPrice(Convert.ToInt32(price))}&view_type=list&q={location.Value.Replace("-", "%")}&radius=15&results_sort=newest_listings&search_source=facets";
+                var document = await _angleSharpWrapper.GetSearchResults(url);
 
-            public async Task<IList<House>> GetProperties(string price)
-            {
-                var uniqueHouses = new List<House>();
-
-                foreach (var location in _londonPostCodes)
+                var searchResults = document.GetElementsByClassName(V3ClassName);
+                if (searchResults.Any())
                 {
-                    var postCodeCounter = 0;
-                    string url = $"https://www.zoopla.co.uk/for-sale/flats/{location.Value.ToLower()}/?is_auction=false&is_shared_ownership=false&page_size=25&price_max={price}&price_min={Calculate25PcOffPrice(Convert.ToInt32(price))}&view_type=list&q={location.Value.Replace("-", "%")}&radius=15&results_sort=newest_listings&search_source=facets";
-                    var document = await _angleSharpWrapper.GetSearchResults(url);
-                    var searchResults = document.GetElementsByClassName("css-1anhqz4-ListingsContainer");
-                    //the class name had changed
-                    //var searchResults = document.GetElementsByClassName("css-1anhqz4-ListingsContainer e1b8efd72");
-                    if (searchResults.Any())
-                    {
                     //then also in the mapper the class names had changed, so basically this scraper breaks because htey are using randomised class names on their site
-                        var newHomes = searchResults.v2MapZ();
-                        foreach (var home in newHomes)
+                    var newHomes = searchResults.v2MapZ();
+                    foreach (var home in newHomes)
+                    {
+                        if (!uniqueHouses.Any(r => r.Link == home.Link))
                         {
-                            if (!uniqueHouses.Any(r => r.Link == home.Link))
-                            {
-                                uniqueHouses.Add(home);
-                                postCodeCounter++;
-                            };
-                        }
+                            uniqueHouses.Add(home);
+                            postCodeCounter++;
+                        };
                     }
-                    await _auditWrapper.SaveToDB(postCodeCounter.Map(location.Value, price, Enums.EstateAgent.Zoopla));
                 }
-
-                return uniqueHouses;
+                await _auditWrapper.SaveToDB(postCodeCounter.Map(location.Value, price, Enums.EstateAgent.Zoopla));
             }
 
-            private int Calculate10PcOffPrice(int price) => price - (price / 100 * 10);
-            private int Calculate25PcOffPrice(int price) => price - (price / 100 * 25);
+            return uniqueHouses;
+        }
+
+        private int Calculate10PcOffPrice(int price) => price - (price / 100 * 10);
+        private int Calculate25PcOffPrice(int price) => price - (price / 100 * 25);
     }
 }

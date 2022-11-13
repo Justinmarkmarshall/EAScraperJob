@@ -1,45 +1,80 @@
 ﻿using AngleSharp.Dom;
+using AngleSharp.Html.Dom;
+using EAScraperJob.Models;
 using EAScraperJob.Models;
 
 namespace EAScraperJob.Mappers.v2
 {
     public static class ZooplaMapper
     {
-        public static List<House> v2MapZ(this IHtmlCollection<IElement> searchResult)
+        private const string PriceClass = "css-xz7r6w-Price";
+        private const string AddressClass = "css-1uvt63a-Address";
+        public static List<House> v2MapZ(this IHtmlCollection<IElement> propertiesDiv)
         {
             var lstReturn = new List<House>();
 
-            foreach (var child in searchResult[0].Children)
+            foreach (var propertyCard in propertiesDiv[0].Children)
             {
                 var pid = "0";
-                var allINeed = child.InnerHtml;
-                var prce = child.GetElementsByClassName("css-xz7r6w-Price e9kuaf13");
-                var address = child.GetElementsByClassName("css-1uvt63a-Address e9kuaf11");
-                var link = child.GetElementsByTagName("e2uk8e5 css-15xcaqt-StyledLink-Link-ImageLink");
-                //var description = child.GetElementsByTagName("img")[0].OuterHtml.Split("=")[3];
-                var aTags = child.QuerySelector("a")?.OuterHtml.Split("=");
+                var aTags = propertyCard.QuerySelector("a")?.OuterHtml.Split("=");
                 if (aTags != null)
                 {
                     pid = aTags[2]?.Split("/")[3];
                 }
 
-                if (!allINeed.ToLower().Contains("hotel")
-                    && !allINeed.ToLower().Contains("retirement")
-                    && !allINeed.ToLower().Contains("investment only")
-                    && !allINeed.ToLower().Contains("cash buyers only")
-                    && !allINeed.ToLower().Contains("shared ownership")
-                    && !allINeed.ToLower().Contains("share")) lstReturn.Add(new House()
+                var imgs = propertyCard.GetElementsByTagName("picture");
+
+                var description = propertyCard.GetElementsByTagName("h2")[0].InnerHtml;
+                var price = "";
+                if (propertyCard.GetElementsByClassName(PriceClass).Any())
+                {
+                    price = propertyCard.GetElementsByClassName(PriceClass)[0].InnerHtml;
+                }
+                var area = "";
+                if (propertyCard.GetElementsByClassName(AddressClass).Any())
+                {
+                    area = propertyCard.GetElementsByClassName(AddressClass)[0].InnerHtml;
+                }
+
+                var images = propertyCard.GetElementsByTagName("picture").Map();
+
+                if (!propertyCard.InnerHtml.ToLower().Contains("hotel")
+                    && !propertyCard.InnerHtml.ToLower().Contains("retirement")
+                    && !propertyCard.InnerHtml.ToLower().Contains("investment only")
+                    && !propertyCard.InnerHtml.ToLower().Contains("cash buyers only")
+                    && !propertyCard.InnerHtml.ToLower().Contains("shared ownership")
+                    && !propertyCard.InnerHtml.ToLower().Contains("share")) lstReturn.Add(new House()
                     {
-                        Price = prce[0].InnerHtml,
-                        Area = address[0].InnerHtml,
+                        Description = description,
+                        Price = price,
+                        Area = area,
+                        Images = images,
                         Link = $"https://www.zoopla.co.uk/for-sale/details/{pid}",
-                        //MonthlyRepayments = CalculateMonthlyRepayment(prce[0].InnerHtml.Replace("£", "").Replace(",", "")),
-                        MonthlyRepayments = 0,
-                        //Deposit = Calculate10PcOfPrice(prce[0].InnerHtml.Remove(0, 1).Replace("£", "").Replace(",", ""))
                         Deposit = 0
                     });
             }
             return lstReturn;
+        }
+
+        private static List<string> Map(this IHtmlCollection<IElement> pics)
+        {
+            var images = new List<string>();
+
+            foreach (var pic in pics)
+            {
+                foreach (IHtmlSourceElement img in pic.GetElementsByTagName("source"))
+                {
+                    string sourceSet = img.SourceSet;
+                    foreach (string url in sourceSet.Split(" "))
+                    {
+                        if (url.Contains("jpg"))
+                        {
+                            images.Add(url);
+                        }
+                    }
+                }
+            }
+            return images;
         }
     }
 }

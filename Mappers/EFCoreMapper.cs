@@ -18,11 +18,13 @@ namespace EAScraperJob.Mappers
                     //price POA causes the price to break
                     properties.Add(new Property()
                     {
-                        Description = $"{ DateTime.Now.ToString()}{ house.Description}",
+                        Description = house.Description,
                         Price = prx,
-                        Area = String.IsNullOrEmpty(house.Area) ? "" : house.Area,
+                        Area = string.IsNullOrWhiteSpace(house.Address.Area) ? "" : house.Address.Area,
                         Link = house.Link,
-                        Deposit = house.Deposit
+                        Deposit = house.Deposit, 
+                        Date = DateTime.Now, 
+                        Postcode = house.Address.PostCode
                     });
                 }
                 catch (Exception ex)
@@ -47,13 +49,23 @@ namespace EAScraperJob.Mappers
             };
         }
 
+        public static Audit Map(this string postcode, string zooplaCode, string title, Enums.EstateAgent site = Enums.EstateAgent.RightMove)
+        => new()
+        {
+            Date = DateTime.Now,
+            Site = (int)site,
+            Postcode = $"postcode {postcode} no longer maps to zooplaCode {zooplaCode}, it now maps to {title}",
+            Price = 0,
+            UniqueResultsCount = 0
+        };
+
         public static Log Map(this Exception ex)
         {
             return new Log()
             {
                 Message = ex.Message,
                 Source = ex.Source,
-                StackTrace = ex.StackTrace,
+                StackTrace = ex.StackTrace.ToCharArray().Take<char>(100).ToString(),
                 HelpLink = ex.HelpLink,
                 TargetSite = ex.TargetSite?.ToString(),
                 Date = DateTime.Now
