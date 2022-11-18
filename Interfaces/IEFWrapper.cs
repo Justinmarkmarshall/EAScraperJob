@@ -4,7 +4,7 @@ namespace EAScraperJob.Interfaces
 {
     public interface IEFWrapper
     {
-        public Task SaveToDB(List<Property> properties);
+        public Task UpsertProperties(List<Property> properties);
 
         public Task<List<Property>> GetFromDB();
 

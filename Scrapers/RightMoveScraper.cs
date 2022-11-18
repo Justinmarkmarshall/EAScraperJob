@@ -12,7 +12,6 @@ namespace EAScraperJob.Scrapers
     public class RightMoveScraper : IRightMoveScraper
     {
         IAngleSharpWrapper _angleSharpWrapper;
-        private IEFWrapper _efWrapper;
         IAuditWrapper _auditWrapper;
         private Dictionary<string, string> _affordablePostCodes = new Dictionary<string, string>()
         {
@@ -86,33 +85,36 @@ namespace EAScraperJob.Scrapers
             foreach (var location in _londonPostCodes)
             {
                 var postCodeCounter = 0;
-                string url = $"https://www.rightmove.co.uk/property-for-sale/find.html?searchType=SALE&locationIdentifier=OUTCODE%{location.Value}&insId=1&radius=1.0&minPrice={Calculate25PcOffPrice(Convert.ToInt32(price))}&maxPrice={price}&minBedrooms=0&maxBedrooms=1&displayPropertyType=flats&maxDaysSinceAdded=&_includeSSTC=on&sortByPriceDescending=&primaryDisplayPropertyType=&secondaryDisplayPropertyType=&oldDisplayPropertyType=&oldPrimaryDisplayPropertyType=&newHome=&auction=false";
-                var document = await _angleSharpWrapper.GetSearchResults(url);
-                if (!document.Title.ToLower().Contains(location.Key.ToLower()))
+                for (int i = 1; i < 6; i++)
                 {
-                    await _auditWrapper.SaveToDB(location.Key.Map(location.Value, document.Title));
-                    continue;
-                }
-                var searchResults = document.GetElementsByClassName("l-searchResults");
-                var properties = searchResults[0].Children;
-                if (properties.Any())
-                {
-                    var newHomes = properties.MapRM();
-                    foreach (var home in newHomes)
+                    string url = $"https://www.rightmove.co.uk/property-for-sale/find.html?searchType=SALE&locationIdentifier=OUTCODE%{location.Value}&insId=1&radius={i}.0&minPrice={Calculate10PcOffPrice(Convert.ToInt32(price))}&maxPrice={price}&minBedrooms=0&maxBedrooms=2&displayPropertyType=flats&maxDaysSinceAdded=&_includeSSTC=on&sortByPriceDescending=&primaryDisplayPropertyType=&secondaryDisplayPropertyType=&oldDisplayPropertyType=&oldPrimaryDisplayPropertyType=&newHome=&auction=false";
+                    var document = await _angleSharpWrapper.GetSearchResults(url);
+                    if (!document.Title.ToLower().Contains(location.Key.ToLower()))
                     {
-                        if (!uniqueHouses.Any(r => r.Link == home.Link))
-                        {
-                            //go off and find out what type it is
-                            //addition will add alot of runtime, but also improve data returned, can also expand upon this data
-                            var page = await _angleSharpWrapper.GetSearchResults(home.Link);
-                            home.Description = page.Title;
-
-                            uniqueHouses.Add(home);
-                            postCodeCounter++;
-                        };
+                        await _auditWrapper.SaveToDB(location.Key.Map(location.Value, document.Title));
+                        continue;
                     }
-                }
-                await _auditWrapper.SaveToDB(postCodeCounter.Map(location.Key, price, Enums.EstateAgent.RightMove));
+                    var searchResults = document.GetElementsByClassName("l-searchResults");
+                    var properties = searchResults[0].Children;
+                    if (properties.Any())
+                    {
+                        var newHomes = properties.MapRM();
+                        foreach (var home in newHomes)
+                        {
+                            if (!uniqueHouses.Any(r => r.Link == home.Link))
+                            {
+                                //go off and find out what type it is
+                                //addition will add alot of runtime, but also improve data returned, can also expand upon this data
+                                var page = await _angleSharpWrapper.GetSearchResults(home.Link);
+                                home.Description = page.Title;
+
+                                uniqueHouses.Add(home);
+                                postCodeCounter++;
+                            };
+                        }
+                    }
+                    await _auditWrapper.SaveToDB(postCodeCounter.Map(location.Key, price, Enums.EstateAgent.RightMove));
+                }               
             }
             return uniqueHouses;
         }
