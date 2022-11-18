@@ -31,7 +31,7 @@ namespace EAScraperJob
                 await _context.AddRangeAsync(unique);
                 await _context.SaveChangesAsync();
             }
-           catch (Exception ex)
+             catch (Exception ex)
             {
 
             }
