@@ -2,6 +2,8 @@
 using EAScraperJob.Dtos;
 using EAScraperJob.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using dto = EAScraperJob.Dtos;
+using db = EAScraperJob.Data.DataContext;
 
 namespace EAScraperJob
 {
@@ -14,17 +16,29 @@ namespace EAScraperJob
             _context = context;
         }
 
-        public async Task SaveToDB(List<Property> properties)
+        public async Task UpsertProperties(List<dto.Property> properties)
         {    
             try
             {
                 var unique = new List<Property>();
 
-                foreach (Property property in properties)
+                foreach (dto.Property property in properties)
                 {
-                    if (!_context.Properties.Select(r => r.Link).ToList().Contains(property.Link))
+                    var existingProperty = _context.Properties.Where(r => r.Link == property.Link).FirstOrDefault(); 
+
+                    if (existingProperty is null)
                     {
                         unique.Add(property);
+                        continue;
+                    }
+
+                    if (existingProperty.Price > property.Price)
+                    {
+                        existingProperty.Price = property.Price;
+                        existingProperty.DateListed = existingProperty.Date;
+                        existingProperty.Date = DateTime.Now;
+                        existingProperty.Reduced = true;
+                        _context.Update(existingProperty);
                     }
                 }
 

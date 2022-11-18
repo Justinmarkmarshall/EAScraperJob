@@ -56,13 +56,11 @@ namespace EAScraperJob
                 if (results.Any())
                 {
                     //remove unique because I think that the pids are reused
-                    var uniqueResults = await RemoveDuplicates(results.ToList(), efWrapper);
-
-                    if (uniqueResults.Any())
-                    {
-                        await efWrapper.SaveToDB(results.Map());
-                    }
-
+                    //don't need to do this, can put into the upsert function
+                    //var uniqueResults = await RemoveDuplicates(results.ToList(), efWrapper);
+                    
+                    await efWrapper.UpsertProperties(results.Map());
+                    
                     //await efWrapper.SaveToDB(results.Map());
                 }
             }

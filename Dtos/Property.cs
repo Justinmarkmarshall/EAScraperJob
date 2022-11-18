@@ -17,5 +17,9 @@ namespace EAScraperJob.Dtos
         public DateTime Date { get; set; } = DateTime.Now;
 
         public string? Postcode { get; set; } = String.Empty;
+
+        public bool Reduced { get; set; } = false;
+
+        public DateTime? DateListed { get; set; } = DateTime.Now;
     }
 }
