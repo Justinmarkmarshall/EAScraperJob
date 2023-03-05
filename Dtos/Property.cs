@@ -20,6 +20,8 @@ namespace EAScraperJob.Dtos
 
         public bool Reduced { get; set; } = false;
 
-        public DateTime? DateListed { get; set; } = DateTime.Now;
+        public DateTime? DateListed { get; set; } = default!;
+
+        public DateTime? DateReduced { get; set; } = default!;
     }
 }

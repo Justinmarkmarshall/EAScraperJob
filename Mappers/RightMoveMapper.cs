@@ -25,6 +25,7 @@ namespace EAScraperJob.Mappers
                     && !allINeed.ToLower().Contains("investment only")
                     && !allINeed.ToLower().Contains("cash buyers only")
                     && !allINeed.ToLower().Contains("shared ownership")
+                    && !allINeed.ToLower().Contains("55")
                     && !allINeed.ToLower().Contains("share")) houses.Add(new House()
                     {
                         Area = address.ToString(),

@@ -24,7 +24,10 @@ namespace EAScraperJob.Mappers
                         Link = house.Link,
                         Deposit = house.Deposit, 
                         Date = DateTime.Now, 
-                        Postcode = house.Address.PostCode
+                        Postcode = house.Address.PostCode,
+                        DateListed = house.DateListed,
+                        DateReduced = house.DateReduced,
+                        Reduced = house.Reduced
                     });
                 }
                 catch (Exception ex)
