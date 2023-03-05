@@ -44,10 +44,11 @@ namespace EAScraperJob
 
                 await _context.AddRangeAsync(unique);
                 await _context.SaveChangesAsync();
+                Console.WriteLine($"Succesfully wrote {unique.Count()} to the DB");
             }
              catch (Exception ex)
             {
-
+                Console.WriteLine($"{ex.Message}, {ex.InnerException}");
             }
         }
 

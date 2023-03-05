@@ -10,5 +10,11 @@
         public int Deposit { get; set; }
         public Address Address { get; set; }
         public string DateScraped { get; set; }
+
+        public DateTime? DateListed { get; set; }
+
+        public DateTime? DateReduced { get; set; }
+
+        public bool Reduced { get; set; }
     }
 }
