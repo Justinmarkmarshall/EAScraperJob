@@ -17,29 +17,43 @@ namespace EAScraperJob
         }
 
         public async Task UpsertProperties(List<dto.Property> properties)
-        {    
+        {
+            Property foobarProperty = null;
             try
             {
                 var unique = new List<Property>();
-
                 foreach (dto.Property property in properties)
                 {
-                    var existingProperty = _context.Properties.Where(r => r.Link == property.Link).FirstOrDefault(); 
 
-                    if (existingProperty is null)
+                    var existingProperty = _context.Properties.Where(r => r.Link == property.Link);
+
+                    if (existingProperty.Any())
                     {
+                        var test = existingProperty.FirstOrDefault();
+
+                        if (test.Deleted.HasValue)
+                        {
+                            if (test.Deleted.Value)
+                            {
+                                continue;
+                            }
+                            
+                        }
+
+                        if (existingProperty!.FirstOrDefault()!.Price > property.Price)
+                        {
+                            existingProperty.FirstOrDefault()!.Price = property.Price;
+                            existingProperty.FirstOrDefault()!.DateListed = existingProperty.FirstOrDefault()!.Date;
+                            existingProperty.FirstOrDefault()!.Date = DateTime.Now;
+                            existingProperty.FirstOrDefault()!.Reduced = true;
+                            _context.Update(existingProperty);
+                        }
+                    }
+                    else
+                    {                        
                         unique.Add(property);
                         continue;
-                    }
-
-                    if (existingProperty.Price > property.Price)
-                    {
-                        existingProperty.Price = property.Price;
-                        existingProperty.DateListed = existingProperty.Date;
-                        existingProperty.Date = DateTime.Now;
-                        existingProperty.Reduced = true;
-                        _context.Update(existingProperty);
-                    }
+                    }                    
                 }
 
                 await _context.AddRangeAsync(unique);
@@ -48,7 +62,7 @@ namespace EAScraperJob
             }
              catch (Exception ex)
             {
-                Console.WriteLine($"{ex.Message}, {ex.InnerException}");
+                Console.WriteLine($"{ex.Message}, {ex.InnerException}, property: {foobarProperty!.Link}");
             }
         }
 

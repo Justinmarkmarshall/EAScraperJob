@@ -27,6 +27,7 @@ namespace EAScraperJob
                 .AddDbContext<DataContext>(options =>
                 {
                     options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"));
+                    options.EnableDetailedErrors(true);
                 })
                 .Configure<PropertyPreferences>(configuration.GetSection("PropertyPreferences"))
                 .AddScoped<DbContext, DataContext>()
