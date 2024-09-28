@@ -63,23 +63,24 @@ namespace EAScraperJob.Scrapers
             { "Cardiff", "5E281" }, 
             { "Swansea", "5E281" }
         };
-        private Dictionary<string, Postcode> _commuterBelt = new Dictionary<string, Postcode>()
-        {
-            { "Luton", new Postcode{ RightMoveRef = "5E876", PriceBand = 140000 }},
-            { "Grays", new Postcode{ RightMoveRef = "5E571", PriceBand = 140000 }},
-            { "Basildon", new Postcode{ RightMoveRef = "5E114", PriceBand = 140000 }},
-            { "Dartford", new Postcode{ RightMoveRef = "5E407", PriceBand = 140000 }},
-            { "Purfleet", new Postcode{ RightMoveRef = "5E7469", PriceBand = 140000 }},
-        };
+        //private Dictionary<string, Postcode> _commuterBelt = new Dictionary<string, Postcode>()
+        //{
+        //    { "Luton", new Postcode{ RightMoveRef = "5E876", PriceBand = 140000 }},
+        //    { "Grays", new Postcode{ RightMoveRef = "5E571", PriceBand = 140000 }},
+        //    { "Basildon", new Postcode{ RightMoveRef = "5E114", PriceBand = 140000 }},
+        //    { "Dartford", new Postcode{ RightMoveRef = "5E407", PriceBand = 140000 }},
+        //    { "Purfleet", new Postcode{ RightMoveRef = "5E7469", PriceBand = 140000 }},
+        //};
         private Dictionary<string, Postcode> _hereToHeathrow = new Dictionary<string, Postcode>()
         {
-            { "Hounslow", new Postcode{ RightMoveRef = "5E66885", PriceBand = 230000 }},
-            { "Putney", new Postcode{ RightMoveRef = "5E85244", PriceBand = 230000 }},
-            { "Ealing", new Postcode{ RightMoveRef = "5E87504", PriceBand = 230000 }},
-            { "Hanwell", new Postcode{ RightMoveRef = "5E70328", PriceBand = 230000 }},
-            { "Isleworth", new Postcode{ RightMoveRef = "5E715", PriceBand = 230000 }},
-            { "Richmond", new Postcode{ RightMoveRef = "5E61415", PriceBand = 230000 }},
-            { "Limehouse", new Postcode{ RightMoveRef = "5E85365", PriceBand = 230000 }},
+            { "Acton",  new Postcode{ RightMoveRef = "5E85314", PriceBand = 250000 } },
+            { "Hounslow", new Postcode{ RightMoveRef = "5E66885", PriceBand = 250000 }},
+            { "Putney", new Postcode{ RightMoveRef = "5E85244", PriceBand = 250000 }},
+            { "Ealing", new Postcode{ RightMoveRef = "5E87504", PriceBand = 250000 }},
+            { "Hanwell", new Postcode{ RightMoveRef = "5E70328", PriceBand = 250000 }},
+            { "Isleworth", new Postcode{ RightMoveRef = "5E715", PriceBand = 250000 }},
+            { "Richmond", new Postcode{ RightMoveRef = "5E61415", PriceBand = 250000 }},
+            { "Limehouse", new Postcode{ RightMoveRef = "5E85365", PriceBand = 250000 }},
         };
         private Dictionary<string, string> _affordablePostCodes = new Dictionary<string, string>()
         {
@@ -107,7 +108,47 @@ namespace EAScraperJob.Scrapers
             { "HA9", "5E79781" },
 
         };
+
+        private Dictionary<string, Postcode> _niceAroundMe = new Dictionary<string, Postcode>()
+        {
+            { "Acton",  new Postcode{ RightMoveRef = "5E85314", PriceBand = 250000 } },
+            { "Putney", new Postcode{ RightMoveRef = "5E85244", PriceBand = 250000 }},
+            { "Ealing", new Postcode{ RightMoveRef = "5E87504", PriceBand = 250000 }},
+            { "Hanwell", new Postcode{ RightMoveRef = "5E70328", PriceBand = 250000 }},
+            { "Isleworth", new Postcode{ RightMoveRef = "5E715", PriceBand = 250000 }},
+            { "Richmond", new Postcode{ RightMoveRef = "5E61415", PriceBand = 250000 }},
+        };
+
+        private Dictionary<string, Postcode> _twoBedsInGreater = new Dictionary<string, Postcode>()
+        {
+            { "Belvedere",  new Postcode{ RightMoveRef = "5E137", PriceBand = 250000 } },
+            //{ "Erith", new Postcode{ RightMoveRef = "5E489", PriceBand = 250000 }},
+            //{ "Dartford", new Postcode{ RightMoveRef = "5E407", PriceBand = 250000 }},
+            //{ "Morden", new Postcode{ RightMoveRef = "5E954", PriceBand = 250000 }},
+            //{ "Basildon", new Postcode{ RightMoveRef = "5E114", PriceBand = 250000 }},
+            //{ "Romford", new Postcode{ RightMoveRef = "5E1138", PriceBand = 250000 }},
+            //{ "Shenfield", new Postcode{ RightMoveRef = "5E21938", PriceBand = 250000 }},
+            { "Crystal Palace", new Postcode{ RightMoveRef = "5E70306", PriceBand = 250000 }},
+            { "Brick Lane",  new Postcode{ RightMoveRef = "5E96864", PriceBand = 250000 } },
+            { "Abbey Wood",  new Postcode{ RightMoveRef = "5E85240", PriceBand = 250000 } },
+            { "Bethnal Green",  new Postcode{ RightMoveRef = "5E85224", PriceBand = 250000 } }, 
+            { "Bristol",  new Postcode{ RightMoveRef = "5E219", PriceBand = 250000 } }, 
+            { "Ilford",  new Postcode{ RightMoveRef = "5E674", PriceBand = 250000 } }
+        };
+
         
+        private Dictionary<string, Postcode> _brickLane = new Dictionary<string, Postcode>()
+        {
+            { "Brick Lane",  new Postcode{ RightMoveRef = "5E96864", PriceBand = 250000 } }
+        };
+
+        private Dictionary<string, Postcode> _leeds = new Dictionary<string, Postcode>()
+        {
+            {
+                "Leeds", new Postcode{ RightMoveRef = "5E787", PriceBand = 100000 }
+            }
+        };
+
         public RightMoveScraper(IOptions<PropertyPreferences> propertyPreferences,
             IAngleSharpWrapper angleSharpWrapper, IAuditWrapper auditWrapper)
         {
@@ -119,19 +160,20 @@ namespace EAScraperJob.Scrapers
         public async Task<IList<House>> GetProperties(int price)
         {
             var uniqueHouses = new List<House>();
-
+            var radius = 5;
             //because when the radius is higher, you get more results and so only the highest ranking ones get collected, changing to 1 mile radius
             //if this is not getting enough, then could do a few queries with different radius'
             //got alot more unique results like this, may need to think about chopping off some postcodes
             //changing back to 2 miles to avoid clogging
             //need to fix the checker for 55s and retirements because getting flooded
-            foreach (var location in _hereToHeathrow)
+            // 2909 changing again to look around leeds so setting radius to 5
+            foreach (var location in _leeds)
             {
                 var postCodeCounter = 0;
-                for (int i = 1; i < 2; i++)
-                {
+                for (int i = 1; i < radius; i++)
+                { 
                     //region is inside london
-                    string url = $"https://www.rightmove.co.uk/property-for-sale/find.html?searchType=SALE&locationIdentifier=REGION%{location.Value.RightMoveRef}&insId=1&radius={i}.0&minPrice={Calculate25PcOffPrice(price)}&maxPrice={price}&minBedrooms=0&maxBedrooms=2&displayPropertyType=flats&maxDaysSinceAdded=&_includeSSTC=on&sortByPriceDescending=&primaryDisplayPropertyType=&secondaryDisplayPropertyType=&oldDisplayPropertyType=&oldPrimaryDisplayPropertyType=&newHome=&auction=false";
+                    string url = $"https://www.rightmove.co.uk/property-for-sale/find.html?searchType=SALE&locationIdentifier=REGION%{location.Value.RightMoveRef}&insId=1&radius={i}.0&minPrice={Calculate25PcOffPrice(price)}&maxPrice={price}&minBedrooms=2&maxBedrooms=5&displayPropertyType=&maxDaysSinceAdded=&_includeSSTC=on&sortByPriceDescending=&primaryDisplayPropertyType=&secondaryDisplayPropertyType=&oldDisplayPropertyType=&oldPrimaryDisplayPropertyType=&newHome=&auction=false";
                     var document = await _angleSharpWrapper.GetSearchResults(url);
                     if (!document.Title.ToLower().Contains(location.Key.ToLower()))
                     {
@@ -166,47 +208,48 @@ namespace EAScraperJob.Scrapers
                 }
             }
 
-            foreach (var location in _commuterBelt)
-            {
-                var postCodeCounter = 0;
-                for (int i = 1; i < 2; i++)
-                {
-                    //instead of outcode in london, these places use regions
-                    string url = $"https://www.rightmove.co.uk/property-for-sale/find.html?searchType=SALE&locationIdentifier=REGION%{location.Value.RightMoveRef}&insId=1&radius={i}.0&minPrice={Calculate25PcOffPrice(price)}&maxPrice={price}&minBedrooms=0&maxBedrooms=2&displayPropertyType=flats&maxDaysSinceAdded=&_includeSSTC=on&sortByPriceDescending=&primaryDisplayPropertyType=&secondaryDisplayPropertyType=&oldDisplayPropertyType=&oldPrimaryDisplayPropertyType=&newHome=&auction=false";
-                    var document = await _angleSharpWrapper.GetSearchResults(url);
-                    //Doc title says Newport
-                    if (!document.Title.ToLower().Contains(location.Key.ToLower()))
-                    {
-                        await _auditWrapper.SaveToDB(location.Key.Map(location.Value.RightMoveRef, document.Title));
-                        continue;
-                    }
-                    var searchResults = document.GetElementsByClassName("l-searchResults");
-                    var properties = searchResults[0].Children;
-                    if (properties.Any())
-                    {
-                        var newHomes = properties.MapRM();
-                        foreach (var home in newHomes)
-                        {
-                            if (!uniqueHouses.Any(r => r.Link == home.Link))
-                            {
-                                //go off and find out what type it is
-                                //addition will add alot of runtime, but also improve data returned, can also expand upon this data
-                                var page = await _angleSharpWrapper.GetSearchResults(home.Link);
-                                home.Description = page.Title;
+            //commenting out 25/05 because it's gotta be Acton baby
+            //foreach (var location in _commuterBelt)
+            //{
+            //    var postCodeCounter = 0;
+            //    for (int i = 1; i < 2; i++)
+            //    {
+            //        //instead of outcode in london, these places use regions
+            //        string url = $"https://www.rightmove.co.uk/property-for-sale/find.html?searchType=SALE&locationIdentifier=REGION%{location.Value.RightMoveRef}&insId=1&radius={i}.0&minPrice={Calculate25PcOffPrice(price)}&maxPrice={price}&minBedrooms=0&maxBedrooms=2&displayPropertyType=flats&maxDaysSinceAdded=&_includeSSTC=on&sortByPriceDescending=&primaryDisplayPropertyType=&secondaryDisplayPropertyType=&oldDisplayPropertyType=&oldPrimaryDisplayPropertyType=&newHome=&auction=false";
+            //        var document = await _angleSharpWrapper.GetSearchResults(url);
+            //        //Doc title says Newport
+            //        if (!document.Title.ToLower().Contains(location.Key.ToLower()))
+            //        {
+            //            await _auditWrapper.SaveToDB(location.Key.Map(location.Value.RightMoveRef, document.Title));
+            //            continue;
+            //        }
+            //        var searchResults = document.GetElementsByClassName("l-searchResults");
+            //        var properties = searchResults[0].Children;
+            //        if (properties.Any())
+            //        {
+            //            var newHomes = properties.MapRM();
+            //            foreach (var home in newHomes)
+            //            {
+            //                if (!uniqueHouses.Any(r => r.Link == home.Link))
+            //                {
+            //                    //go off and find out what type it is
+            //                    //addition will add alot of runtime, but also improve data returned, can also expand upon this data
+            //                    var page = await _angleSharpWrapper.GetSearchResults(home.Link);
+            //                    home.Description = page.Title;
 
-                                var listingInfo = page.GetElementsByClassName("_2nk2x6QhNB1UrxdI5KpvaF");
-                                if (listingInfo.Any())
-                                {
-                                    ProcessDates(home, listingInfo[0].TextContent.ToLower());
-                                }
-                                uniqueHouses.Add(home);
-                                postCodeCounter++;
-                            };
-                        }
-                    }
-                    await _auditWrapper.SaveToDB(postCodeCounter.Map(location.Key, price.ToString(), Enums.EstateAgent.RightMove));
-                }               
-            }
+            //                    var listingInfo = page.GetElementsByClassName("_2nk2x6QhNB1UrxdI5KpvaF");
+            //                    if (listingInfo.Any())
+            //                    {
+            //                        ProcessDates(home, listingInfo[0].TextContent.ToLower());
+            //                    }
+            //                    uniqueHouses.Add(home);
+            //                    postCodeCounter++;
+            //                };
+            //            }
+            //        }
+            //        await _auditWrapper.SaveToDB(postCodeCounter.Map(location.Key, price.ToString(), Enums.EstateAgent.RightMove));
+            //    }               
+            //}
             return uniqueHouses;
         }
 
